@@ -20,12 +20,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get Peripheral Manager for managing the gpio.
         manager = PeripheralManager.getInstance();
 
+        // get available gpio pin list.
+        // each pin name is consist as P + physical pin number.
         List<String> gpioList = manager.getGpioList();
 
         try {
+            // get first available gpio pin.
+            // in this case, Physical pin #3 is used.
             gpio = manager.openGpio(gpioList.get(0));
+
+            // set the pin's direction and initial state.
             gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
             Switch gpioSwitch = findViewById(R.id.gpio_switch);
 
@@ -35,8 +42,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         Switch gpioSwitch = (Switch) v;
                         if (gpioSwitch.isChecked()) {
+                            // set pin #3 to high, or 1.
                             gpio.setValue(true);
                         } else {
+                            // set pin #3 to low, or 0.
                             gpio.setValue(false);
                         }
                     } catch (IOException io) {
