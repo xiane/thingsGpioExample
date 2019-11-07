@@ -2,11 +2,14 @@ package odroid.hardkernel.com.thingsgpioexample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.Pwm;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,36 +28,53 @@ public class MainActivity extends AppCompatActivity {
 
         // get available gpio pin list.
         // each pin name is consist as P + physical pin number.
-        List<String> gpioList = manager.getGpioList();
+        List<String> gpioList = manager.getPwmList();
 
+        for(String pin:gpioList)
+            Log.d("things", "pin name - " + pin);
+        Switch gpioSwitch = findViewById(R.id.gpio_switch);
         try {
-            // get first available gpio pin.
-            // in this case, Physical pin #3 is used.
-            gpio = manager.openGpio(gpioList.get(0));
+            final Pwm pwm = manager.openPwm(gpioList.get(1));
 
-            // set the pin's direction and initial state.
-            gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-            Switch gpioSwitch = findViewById(R.id.gpio_switch);
+            pwm.setPwmFrequencyHz(3000);
+            SeekBar pwm_dutyCycle = findViewById(R.id.pwm_dutyCycle_seekbar);
 
+            pwm_dutyCycle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    try {
+                        pwm.setPwmDutyCycle(progress);
+                    } catch (IOException e) {}
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
             gpioSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
                         Switch gpioSwitch = (Switch) v;
                         if (gpioSwitch.isChecked()) {
-                            // set pin #3 to high, or 1.
-                            gpio.setValue(true);
+                            pwm.setEnabled(true);
+
                         } else {
-                            // set pin #3 to low, or 0.
-                            gpio.setValue(false);
+                            pwm.setEnabled(false);
                         }
                     } catch (IOException io) {
                         io.printStackTrace();
                     }
                 }
             });
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
