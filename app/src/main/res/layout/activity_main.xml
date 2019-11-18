@@ -20,4 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <SeekBar
+        android:id="@+id/pwm_dutyCycle_seekbar"
+        android:layout_width="370dp"
+        android:layout_height="63dp"
+        android:max="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="280dp" />
+
 </android.support.constraint.ConstraintLayout>
