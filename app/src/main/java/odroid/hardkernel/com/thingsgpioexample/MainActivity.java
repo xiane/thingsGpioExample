@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     final static byte LCD_CMD = 0;
     final static byte LCD_LINE_1 = (byte) 0x80;
     final static byte LCD_LINE_2 = (byte) 0xC0;
+    final static byte LCD_LINE_3 = (byte) 0x94;
+    final static byte LCD_LINE_4 = (byte) 0xD4;
     final static byte LCD_BACKLIGHT = 0x08;
     final static byte ENABLE = 0b00000100;
 
@@ -43,10 +45,16 @@ public class MainActivity extends AppCompatActivity {
             while (true) {
                 lcd_string("***ODROID-N2*** ", LCD_LINE_1);
                 lcd_string("ODROID-magazine ", LCD_LINE_2);
+
+                lcd_string("A speed is reliable?", LCD_LINE_3);
+                lcd_string("Or is it really slow", LCD_LINE_4);
                 Thread.sleep(3000);
 
                 lcd_string("***HardKernel***", LCD_LINE_1);
                 lcd_string("*hardkernel.com*", LCD_LINE_2);
+
+                lcd_string("This is I2C test apk", LCD_LINE_3);
+                lcd_string("4th line is work yeh", LCD_LINE_4);
                 Thread.sleep(3000);
             }
         } catch (Exception e) {}
