@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">thingsGpioExample</string>
     <string name="gpio_switch">Gpio Switch</string>
+    <string name="uv">UV</string>
+    <string name="visible">Visible</string>
+    <string name="ir">IR</string>
+    <string name="uv_idx">default</string>
+    <string name="visiable_lux">default lux</string>
+    <string name="ir_lux">default lux</string>
 </resources>
