@@ -7,17 +7,25 @@
     tools:context=".MainActivity">
 
     <Switch
-        android:id="@+id/gpio_switch"
+        android:id="@+id/pwm_switch"
         android:layout_width="wrap_content"
         android:layout_height="27dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/gpio_switch"
+        android:text="@string/pwm_switch"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/pwm_dutyCycle_seekbar"
+        android:layout_width="307dp"
+        android:layout_height="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="303dp" />
 
 </android.support.constraint.ConstraintLayout>

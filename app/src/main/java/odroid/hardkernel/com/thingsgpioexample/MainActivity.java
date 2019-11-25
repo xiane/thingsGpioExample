@@ -26,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
         // get Peripheral Manager for managing the gpio.
         manager = PeripheralManager.getInstance();
 
-        // get available gpio pin list.
+        // get available pwm pin list.
         // each pin name is consist as P + physical pin number.
-        List<String> gpioList = manager.getPwmList();
+        List<String> pwmList = manager.getPwmList();
 
-        for(String pin:gpioList)
+        for(String pin:pwmList)
             Log.d("things", "pin name - " + pin);
-        Switch gpioSwitch = findViewById(R.id.gpio_switch);
+        Switch pwmSwitch = findViewById(R.id.pwm_switch);
         try {
-            final Pwm pwm = manager.openPwm(gpioList.get(1));
+            final Pwm pwm = manager.openPwm(pwmList.get(1));
 
             pwm.setPwmFrequencyHz(3000);
             SeekBar pwm_dutyCycle = findViewById(R.id.pwm_dutyCycle_seekbar);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            gpioSwitch.setOnClickListener(new View.OnClickListener() {
+            pwmSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {

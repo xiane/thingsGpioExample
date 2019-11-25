@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">thingsGpioExample</string>
-    <string name="gpio_switch">Gpio Switch</string>
+    <string name="pwm_switch">Pwm Switch</string>
 </resources>
