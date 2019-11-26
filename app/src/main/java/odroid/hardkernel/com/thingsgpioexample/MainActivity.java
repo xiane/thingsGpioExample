@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     void lcd_string(String msg, byte line) throws Exception {
         lcd_byte(line, LCD_CMD);
-        for(char ch: msg.toCharArray()) {
+        for(char ch: msg.substring(0, LCD_WIDTH).toCharArray()) {
             lcd_byte(ch, LCD_CHR);
         }
     }
