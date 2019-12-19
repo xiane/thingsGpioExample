@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> i2cList = manager.getI2cBusList();
 
         try {
-            board =new WeatherBoard(manager.openI2cDevice(i2cList.get(0),
-                    WeatherBoard.SI1132_ID));
+            board = new WeatherBoard(manager, i2cList.get(0));
             board.init();
         } catch (Exception e) {}
 
