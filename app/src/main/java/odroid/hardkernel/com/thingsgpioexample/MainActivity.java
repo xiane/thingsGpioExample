@@ -5,17 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.google.android.things.pio.PeripheralManager;
-
-import java.util.List;
+import odroid.hardkernel.com.WeatherBoard.WeatherBoard;
 
 public class MainActivity extends AppCompatActivity {
-
-    PeripheralManager manager;
-
     TextView uv;
     TextView visible;
     TextView ir;
+
+    TextView temp;
+    TextView hum;
+    TextView press;
+    TextView altitude;
     WeatherBoard board;
 
     final Handler handler = new Handler();
@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
                 uv.setText("" + (board.readUV() / 100.0));
                 visible.setText(" " + board.readVisible() + " LUX");
                 ir.setText(board.readIR() + " LUX");
+
+                temp.setText("" + board.readTemperature() + "C");
+                hum.setText("" + board.readHumidity() + "%");
+                double pressure = board.readPressure();
+                press.setText("" + pressure + "hPa");
+                altitude.setText("" + board.readAltitude(pressure, 1024.25) + "M");
             } catch(Exception e) {e.printStackTrace();}
         }
     };
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (Exception e) {}
                 handler.post(weather);
             }
@@ -50,15 +56,13 @@ public class MainActivity extends AppCompatActivity {
         visible = findViewById(R.id.text_visiable);
         ir = findViewById(R.id.text_ir);
 
-        // get Peripheral Manager for managing the i2c.
-        manager = PeripheralManager.getInstance();
-
-        // get available i2c pin list.
-        // each pin name is consist as P + physical pin number.
-        List<String> i2cList = manager.getI2cBusList();
+        temp = findViewById(R.id.text_temperature);
+        hum = findViewById(R.id.text_humidity);
+        press = findViewById(R.id.text_pressure);
+        altitude = findViewById(R.id.text_altitude);
 
         try {
-            board = new WeatherBoard(manager, i2cList.get(0));
+            board = new WeatherBoard();
             board.init();
         } catch (Exception e) {}
 

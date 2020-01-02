@@ -1,4 +1,4 @@
-package odroid.hardkernel.com.thingsgpioexample;
+package odroid.hardkernel.com.WeatherBoard;
 
 import com.google.android.things.pio.I2cDevice;
 

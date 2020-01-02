@@ -7,4 +7,12 @@
     <string name="uv_idx">default</string>
     <string name="visiable_lux">default lux</string>
     <string name="ir_lux">default lux</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="altitude">Altitude</string>
+    <string name="temperature_c">default_C</string>
+    <string name="humidity_k">default_%</string>
+    <string name="pressure_hpa">default_hPa</string>
+    <string name="altitude_m">default_M</string>
 </resources>
