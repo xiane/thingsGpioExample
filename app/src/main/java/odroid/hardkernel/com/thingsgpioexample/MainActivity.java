@@ -16,18 +16,18 @@ public class MainActivity extends AppCompatActivity {
             lcd = new LCD();
             lcd.init();
             while (true) {
-                lcd.print("***ODROID-N2*** ", LCD.LINE_1);
-                lcd.print("ODROID-magazine ", LCD.LINE_2);
+                lcd.print("****ODROID-N2****", 1);
+                lcd.print("ODROID-magazine ", 2);
 
-                lcd.print("A speed is reliable?", LCD.LINE_3);
-                lcd.print("Or is it really slow", LCD.LINE_4);
+                lcd.print("A speed is reliable?", 3);
+                lcd.print("Or is it really slow", 4);
                 Thread.sleep(3000);
 
-                lcd.print("***HardKernel***", LCD.LINE_1);
-                lcd.print("*hardkernel.com*", LCD.LINE_2);
+                lcd.print("***HardKernel***", 1);
+                lcd.print("*hardkernel.com*", 2);
 
-                lcd.print("This is I2C test apk", LCD.LINE_3);
-                lcd.print("4th line is work yeh", LCD.LINE_4);
+                lcd.print("This is I2C test apk", 3);
+                lcd.print("4th line is work yeh", 4);
                 Thread.sleep(3000);
             }
         } catch (Exception e) {

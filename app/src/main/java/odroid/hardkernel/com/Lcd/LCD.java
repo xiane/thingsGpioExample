@@ -9,16 +9,55 @@ public class LCD {
     private I2cDevice device;
 
     final private static int I2C_ADDR = 0x27;
-    final private static int LCD_WIDTH = 16;
     final private static byte LCD_CHR = 1;
     final private static byte LCD_CMD = 0;
-    final private static byte LCD_BACKLIGHT = 0x08;
     final private static byte ENABLE = 0b00000100;
 
-    final public static byte LINE_1 = (byte) 0x80;
-    final public static byte LINE_2 = (byte) 0xC0;
-    final public static byte LINE_3 = (byte) 0x94;
-    final public static byte LINE_4 = (byte) 0xD4;
+    // commands
+    final private static int LCD_CLEARDISPLAY = 0x01;
+    final private static int LCD_RETURNHOME = 0x02;
+    final private static int LCD_ENTRYMODESET = 0x04;
+    final private static int LCD_DISPLAYCONTROL = 0x08;
+    final private static int LCD_CURSORSHIFT = 0x10;
+    final private static int LCD_FUNCTIONSET = 0x20;
+    final private static int LCD_SETCGRAMADDR = 0x40;
+    final private static int LCD_SETDDRAMADDR = 0x80;
+    // flags for display entry mode
+    final private static int LCD_ENTRYRIGHT = 0x00;
+    final private static int LCD_ENTRYLEFT = 0x02;
+    final private static int LCD_ENTRYSHIFTINCREMENT = 0x01;
+    final private static int LCD_ENTRYSHIFTDECREMENT = 0x00;
+
+    // flags for display on/off control
+    final private static int LCD_DISPLAYON = 0x04;
+    final private static int LCD_DISPLAYOFF = 0x00;
+    final private static int LCD_CURSORON = 0x02;
+    final private static int LCD_CURSOROFF = 0x00;
+    final private static int LCD_BLINKON = 0x01;
+    final private static int LCD_BLINKOFF = 0x00;
+
+    // flags for display/cursor shift
+    final private static int LCD_DISPLAYMOVE = 0x08;
+    final private static int LCD_CURSORMOVE = 0x00;
+    final private static int LCD_MOVERIGHT = 0x04;
+    final private static int LCD_MOVELEFT = 0x00;
+
+    // flags for function set
+    final private static int LCD_8BITMODE = 0x10;
+    final private static int LCD_4BITMODE = 0x00;
+    final private static int LCD_2LINE = 0x08;
+    final private static int LCD_1LINE = 0x00;
+    final private static int LCD_5x10DOTS = 0x04;
+    final private static int LCD_5x8DOTS = 0x00;
+
+    // flags for backlight control
+    final private static int LCD_BACKLIGHT = 0x08;
+    final private static int LCD_NOBACKLIGHT = 0x00;
+
+    private final static byte LINE_1 = (byte) 0x80;
+    private final static byte LINE_2 = (byte) 0xC0;
+    private final static byte LINE_3 = (byte) 0x94;
+    private final static byte LINE_4 = (byte) 0xD4;
 
     public LCD() throws Exception {
         // get Peripheral Manager for managing the i2c device.
@@ -34,13 +73,20 @@ public class LCD {
     }
 
     public void init() throws Exception {
-        lcd_byte(0x33, LCD_CMD); // 0b110011 Initialise
-        lcd_byte(0x32, LCD_CMD); // 0b110010 Initialise
-        lcd_byte(0x06, LCD_CMD); // 0b000110 Cursor move direction
-        lcd_byte(0x0C, LCD_CMD); // 0b001100 Display On, Cursor Off, Blink Off
-        lcd_byte(0x28, LCD_CMD); // 0b101000 Data length, Number of Lines, Font size
-        lcd_byte(0x01, LCD_CMD); // 0b000001 Clear Display
+        write_cmd(0x03);
+        write_cmd(0x03);
+        write_cmd(0x03);
+        write_cmd(0x02);
+
+        write_cmd(LCD_ENTRYMODESET | LCD_ENTRYLEFT);
+        write_cmd(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE);
+        write_cmd(LCD_DISPLAYCONTROL | LCD_DISPLAYON);
+        write_cmd(LCD_CLEARDISPLAY);
         Thread.sleep(5);
+    }
+
+    private void write_cmd(int bits) throws Exception {
+        lcd_byte(bits, LCD_CMD);
     }
 
     private void lcd_byte(int bits, byte mode) throws Exception {
@@ -57,9 +103,23 @@ public class LCD {
         device.writeRegByte(0, (byte) (bits & ~ENABLE));
     }
 
-    public void print(String msg, byte line) throws Exception {
-        lcd_byte(line, LCD_CMD);
-        for(char ch: msg.substring(0, LCD_WIDTH).toCharArray()) {
+    public void print(String msg, int line) throws Exception {
+        switch (line) {
+            case 1:
+                write_cmd(LINE_1);
+                break;
+            case 2:
+                write_cmd(LINE_2);
+                break;
+            case 3:
+                write_cmd(LINE_3);
+                break;
+            case 4:
+                write_cmd(LINE_4);
+                break;
+        }
+
+        for(char ch: msg.toCharArray()) {
             lcd_byte(ch, LCD_CHR);
         }
     }
