@@ -9,6 +9,7 @@ public class LCD {
     private I2cDevice device;
 
     final private static int I2C_ADDR = 0x27;
+    final private static int LCD_LENGTH = 20;
     final private static byte LCD_CHR = 1;
     final private static byte LCD_CMD = 0;
     final private static byte ENABLE = 0b00000100;
@@ -118,6 +119,9 @@ public class LCD {
                 write_cmd(LINE_4);
                 break;
         }
+
+        if (msg.length() > LCD_LENGTH)
+            msg = msg.substring(0, LCD_LENGTH);
 
         for(char ch: msg.toCharArray()) {
             lcd_byte(ch, LCD_CHR);
