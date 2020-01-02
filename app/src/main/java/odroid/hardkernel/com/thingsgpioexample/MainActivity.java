@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            lcd = new LCD();
+            lcd = new LCD(20, 4);
             lcd.init();
             while (true) {
                 lcd.print("****ODROID-N2****", 1);

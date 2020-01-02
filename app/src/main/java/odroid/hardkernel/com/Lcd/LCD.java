@@ -8,8 +8,10 @@ import java.util.List;
 public class LCD {
     private I2cDevice device;
 
+    private int max_line;
+    private int max_length;
+
     final private static int I2C_ADDR = 0x27;
-    final private static int LCD_LENGTH = 20;
     final private static byte LCD_CHR = 1;
     final private static byte LCD_CMD = 0;
     final private static byte ENABLE = 0b00000100;
@@ -60,7 +62,7 @@ public class LCD {
     private final static byte LINE_3 = (byte) 0x94;
     private final static byte LINE_4 = (byte) 0xD4;
 
-    public LCD() throws Exception {
+    public LCD(int col, int row) throws Exception {
         // get Peripheral Manager for managing the i2c device.
         PeripheralManager manager = PeripheralManager.getInstance();
 
@@ -71,6 +73,9 @@ public class LCD {
          */
         List<String> i2cBusList = manager.getI2cBusList();
         device = manager.openI2cDevice(i2cBusList.get(0), I2C_ADDR);
+
+        max_line = row;
+        max_length = col;
     }
 
     public void init() throws Exception {
@@ -105,6 +110,9 @@ public class LCD {
     }
 
     public void print(String msg, int line) throws Exception {
+        if (line > max_line)
+            throw new Exception("Out of line");
+
         switch (line) {
             case 1:
                 write_cmd(LINE_1);
@@ -120,8 +128,8 @@ public class LCD {
                 break;
         }
 
-        if (msg.length() > LCD_LENGTH)
-            msg = msg.substring(0, LCD_LENGTH);
+        if (msg.length() > max_length)
+            msg = msg.substring(0, max_length);
 
         for(char ch: msg.toCharArray()) {
             lcd_byte(ch, LCD_CHR);
