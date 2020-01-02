@@ -17,8 +17,9 @@ public class WeatherBoard {
         // get Peripheral Manager for managing the i2c.
         manager = PeripheralManager.getInstance();
 
-        /*get available i2c pin list.
-          i2c name format - i2c-#.
+        /*
+          get available i2c pin list.
+          i2c name format - i2c-#, and n2 have i2c-2 and i2c-3.
           In this case, i2c-2 is used.
          */
         List<String> i2cList = manager.getI2cBusList();
