@@ -8,7 +8,6 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.google.android.things.pio.PeripheralManager;
-import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.Pwm;
 
 import java.io.IOException;
@@ -17,21 +16,21 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     PeripheralManager manager;
-    Gpio gpio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get Peripheral Manager for managing the gpio.
+        // get a Peripheral Manager for managing the pwm.
         manager = PeripheralManager.getInstance();
 
         // get available pwm pin list.
-        // each pin name is consist as P + physical pin number.
+        // each pwm name is physical pin number.
         List<String> pwmList = manager.getPwmList();
 
         for(String pin:pwmList)
-            Log.d("things", "pin name - " + pin);
+            Log.d("things", "pwm name - " + pin);
         Switch pwmSwitch = findViewById(R.id.pwm_switch);
         try {
             final Pwm pwm = manager.openPwm(pwmList.get(1));
