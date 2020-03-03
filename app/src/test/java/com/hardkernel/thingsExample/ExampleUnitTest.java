@@ -1,4 +1,4 @@
-package odroid.hardkernel.com.thingsgpioexample;
+package com.hardkernel.thingsExample;
 
 import org.junit.Test;
 
