@@ -1,20 +1,18 @@
 package odroid.hardkernel.com.thingsgpioexample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Switch;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.android.things.pio.PeripheralManager;
-import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.UartDevice;
 
-import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     PeripheralManager manager;
-    Gpio gpio;
+    UartDevice uart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,36 +21,38 @@ public class MainActivity extends AppCompatActivity {
         // get Peripheral Manager for managing the gpio.
         manager = PeripheralManager.getInstance();
 
-        // get available gpio pin list.
-        // each pin name is consist as P + physical pin number.
-        List<String> gpioList = manager.getGpioList();
+        // get available uart pin list.
+        // each uart name is UART-# number.
+        List<String> uartList = manager.getUartDeviceList();
 
         try {
-            // get first available gpio pin.
-            // in this case, Physical pin #3 is used.
-            gpio = manager.openGpio(gpioList.get(0));
+            // get first available a uart.
+            // in this case, UART-1 is used.
+            uart = manager.openUartDevice(uartList.get(0));
 
-            // set the pin's direction and initial state.
-            gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-            Switch gpioSwitch = findViewById(R.id.gpio_switch);
+            // baudrate - 115200, 8N1, non hardware flow control
+            uart.setBaudrate(115200);
+            uart.setDataSize(8);
+            uart.setParity(UartDevice.PARITY_NONE);
+            uart.setStopBits(1);
+            uart.setHardwareFlowControl(UartDevice.HW_FLOW_CONTROL_NONE);
 
-            gpioSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Switch gpioSwitch = (Switch) v;
-                        if (gpioSwitch.isChecked()) {
-                            // set pin #3 to high, or 1.
-                            gpio.setValue(true);
-                        } else {
-                            // set pin #3 to low, or 0.
-                            gpio.setValue(false);
-                        }
-                    } catch (IOException io) {
-                        io.printStackTrace();
-                    }
+            String data = "This is test transfer data";
+            uart.write(data.getBytes(), data.length());
+
+            uart.flush(UartDevice.FLUSH_OUT);
+            while (true) {
+                byte[] buff = new byte[20];
+
+                int length = uart.read(buff, 20);
+                if (length > 0) {
+                    String retString = new String(buff, 0, length);
+                    Log.d("UartExample", "msg - " + retString);
+                    if (retString.startsWith("exit"))
+                        break;
                 }
-            });
+            }
+            uart.close();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
