@@ -1,60 +1,71 @@
 package odroid.hardkernel.com.thingsgpioexample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Switch;
-
-import com.google.android.things.pio.PeripheralManager;
-import com.google.android.things.pio.Gpio;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.IOException;
-import java.util.List;
+
+import odroid.hardkernel.com.max30100.Max30100;
+import odroid.hardkernel.com.max30100.PulseOxiMeter;
 
 public class MainActivity extends AppCompatActivity {
 
-    PeripheralManager manager;
-    Gpio gpio;
+    static final String TAG = "MAX30100";
+    Max30100 sensor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get Peripheral Manager for managing the gpio.
-        manager = PeripheralManager.getInstance();
 
-        // get available gpio pin list.
-        // each pin name is consist as P + physical pin number.
-        List<String> gpioList = manager.getGpioList();
+        Thread sensorThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+//                    sensor = new Max30100("I2C-1");
+//
+//                    sensor.initialize();
+//
+//                    sensor.begin(Max30100.modeControl.SPO2_HR,
+//                            Max30100.pulseWidth.us1600,
+//                            Max30100.ledCurrent.i50, Max30100.ledCurrent.i27,
+//                            Max30100.sampleRate.hz100);
+//                    sensor.setHiResModeEnable(true);
+//                    sensor.resetFifo();
+//
+//                    while (true) {
+//                        int sampleNum = sensor.update();
+//                        while (sampleNum-- > 0) {
+//                            Log.d(TAG, "IR - " + sensor.getIR());
+//                            Log.d(TAG, "RED - " + sensor.getRED());
+//                        }
+//                        try {
+//                            Thread.sleep(100);
+//                        } catch (InterruptedException e) {
+//
+//                        }
+//                    }
+                    PulseOxiMeter sensor = new PulseOxiMeter("I2C-1");
 
-        try {
-            // get first available gpio pin.
-            // in this case, Physical pin #3 is used.
-            gpio = manager.openGpio(gpioList.get(0));
+                    sensor.initialize();
 
-            // set the pin's direction and initial state.
-            gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-            Switch gpioSwitch = findViewById(R.id.gpio_switch);
+                    while (true) {
+                        sensor.update();
 
-            gpioSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Switch gpioSwitch = (Switch) v;
-                        if (gpioSwitch.isChecked()) {
-                            // set pin #3 to high, or 1.
-                            gpio.setValue(true);
-                        } else {
-                            // set pin #3 to low, or 0.
-                            gpio.setValue(false);
-                        }
-                    } catch (IOException io) {
-                        io.printStackTrace();
+                        double heartRate = sensor.getHeartRate();
+                        if (heartRate > 1)
+                            Log.d(TAG, "Heart - " + heartRate);
+
+                        double spO2 = sensor.getSpO2();
+                        if (spO2 > 0)
+                            Log.d(TAG, "spO2 - " + spO2);
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+            }
+        });
+        sensorThread.run();
     }
 }
