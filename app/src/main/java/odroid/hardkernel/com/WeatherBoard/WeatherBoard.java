@@ -13,13 +13,39 @@ public class WeatherBoard {
     /* Temperature, Humidity, Pressure, Altitude */
     private BME280 bme280;
 
+    public WeatherBoard(String i2c) {
+        // get Peripheral Manager for managing the i2c.
+        manager = PeripheralManager.getInstance();
+
+        /*
+          get available i2c pin list.
+          i2c name format - i2c-#, and n2/c4 have I2C-1 and I2C-2.
+          If given i2c name is in list, use it.
+         */
+        List<String> i2cList = manager.getI2cBusList();
+
+        try {
+            String i2cBusName;
+
+            if (i2cList.contains(i2c))
+                i2cBusName = i2c;
+            else
+                i2cBusName = i2cList.get(0);
+
+            si1132 = new SI1132(manager.openI2cDevice(i2cBusName, SI1132.ADDRESS));
+            bme280 = new BME280(manager.openI2cDevice(i2cBusName, BME280.ADDRESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public WeatherBoard() {
         // get Peripheral Manager for managing the i2c.
         manager = PeripheralManager.getInstance();
 
         /*
           get available i2c pin list.
-          i2c name format - i2c-#, and n2 have i2c-2 and i2c-3.
+          i2c name format - I2C-#, and n2/c4 have I2C-1 and I2C-2.
           In this case, i2c-2 is used.
          */
         List<String> i2cList = manager.getI2cBusList();

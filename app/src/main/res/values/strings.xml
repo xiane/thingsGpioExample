@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">thingsGpioExample</string>
+    <string name="app_name">Weather Board Example</string>
     <string name="gpio_switch">Gpio Switch</string>
     <string name="uv">UV</string>
     <string name="visible">Visible</string>
