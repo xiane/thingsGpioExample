@@ -1,5 +1,6 @@
 package odroid.hardkernel.com.thingsgpioexample;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,18 +21,19 @@ public class MainActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
     final Runnable weather = new Runnable() {
+        @SuppressLint("DefaultLocale")
         @Override
         public void run() {
             try {
-                uv.setText("" + (board.readUV() / 100.0));
-                visible.setText(" " + board.readVisible() + " LUX");
-                ir.setText(board.readIR() + " LUX");
+                uv.setText(String.format("%10.2f", (board.readUV() / 100.0)));
+                visible.setText(String.format(" %3.2f LUX", board.readVisible()));
+                ir.setText(String.format("%3.2f LUX", board.readIR()));
 
-                temp.setText("" + board.readTemperature() + "C");
-                hum.setText("" + board.readHumidity() + "%");
+                temp.setText(String.format(" %2.2fC", board.readTemperature()));
+                hum.setText(String.format("%3.2f%%", board.readHumidity()));
                 double pressure = board.readPressure();
-                press.setText("" + pressure + "hPa");
-                altitude.setText("" + board.readAltitude(pressure, 1024.25) + "M");
+                press.setText(String.format("%4.2fhPa", pressure));
+                altitude.setText(String.format("%3.2fM", board.readAltitude(pressure, 1024.25)));
             } catch(Exception e) {e.printStackTrace();}
         }
     };
@@ -42,11 +44,14 @@ public class MainActivity extends AppCompatActivity {
             while (true) {
                 try {
                     Thread.sleep(100);
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 handler.post(weather);
             }
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             board = new WeatherBoard("I2C-2");
             board.init();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         rapidRunnable rapid = new rapidRunnable();
         Thread thread = new Thread(rapid);

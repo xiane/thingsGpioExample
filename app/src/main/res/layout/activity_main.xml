@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,9 +16,10 @@
         android:layout_height="match_parent"
         android:gravity="center">
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center|top" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/uv"
+                android:textSize="30sp"
                 android:visibility="visible" />
 
             <TextView
@@ -39,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/visible"
+                android:textSize="30sp"
                 android:visibility="visible" />
 
 
@@ -47,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ir"
+                android:textSize="30sp"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -61,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/uv_idx"/>
 
             <TextView
@@ -68,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/visiable_lux" />
 
             <TextView
@@ -75,14 +80,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/ir_lux" />
         </LinearLayout>
     </LinearLayout>
 
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center|top" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/temperature"
+                android:textSize="30sp"
                 android:visibility="visible" />
 
             <TextView
@@ -102,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/humidity"
+                android:textSize="30sp"
                 android:visibility="visible" />
 
 
@@ -110,12 +119,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pressure"
+                android:textSize="30sp"
                 android:visibility="visible" />
             <TextView
                 android:id="@+id/altitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/altitude"
+                android:textSize="30sp"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -130,6 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/temperature_c"/>
 
             <TextView
@@ -137,6 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/humidity_k" />
 
             <TextView
@@ -144,12 +157,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/pressure_hpa" />
             <TextView
                 android:id="@+id/text_altitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:textSize="30sp"
                 android:text="@string/altitude_m" />
         </LinearLayout>
     </LinearLayout>
