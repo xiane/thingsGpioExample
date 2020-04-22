@@ -3,6 +3,7 @@ package odroid.hardkernel.com.Lcd;
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManager;
 
+import java.io.IOException;
 import java.util.List;
 
 public class LCD {
@@ -62,23 +63,27 @@ public class LCD {
     private final static byte LINE_3 = (byte) 0x94;
     private final static byte LINE_4 = (byte) 0xD4;
 
-    public LCD(int col, int row) throws Exception {
+    public LCD(String i2cBus) throws IOException {
         // get Peripheral Manager for managing the i2c device.
         PeripheralManager manager = PeripheralManager.getInstance();
 
+        List<String> i2cBusList = manager.getI2cBusList();
+
         /*
           get available i2c pin list.
-          i2c name format - i2c-#, and n2 have i2c-2 and i2c-3.
-          In this case, i2c-2 is used.
+          i2c name format - I2C-#, and n2/c4 have I2C-1 and I2C-2.
+          In this case use given bus. if given bus is not in list, use default one.
          */
-        List<String> i2cBusList = manager.getI2cBusList();
-        device = manager.openI2cDevice(i2cBusList.get(0), I2C_ADDR);
-
-        max_line = row;
-        max_length = col;
+        if (i2cBusList.contains(i2cBus))
+            device = manager.openI2cDevice(i2cBus, I2C_ADDR);
+        else
+            device = manager.openI2cDevice(i2cBusList.get(0), I2C_ADDR);
     }
 
-    public void init() throws Exception {
+    public void init(int col, int row) throws IOException, InterruptedException {
+        max_line = row;
+        max_length = col;
+
         write_cmd(0x03);
         write_cmd(0x03);
         write_cmd(0x03);
@@ -91,11 +96,11 @@ public class LCD {
         Thread.sleep(5);
     }
 
-    private void write_cmd(int bits) throws Exception {
+    private void write_cmd(int bits) throws IOException {
         lcd_byte(bits, LCD_CMD);
     }
 
-    private void lcd_byte(int bits, byte mode) throws Exception {
+    private void lcd_byte(int bits, byte mode) throws IOException {
         byte bits_high = (byte) (mode | (bits & 0xF0) | LCD_BACKLIGHT);
         byte bits_low = (byte) (mode | (bits << 4) & 0xF0 | LCD_BACKLIGHT);
         device.writeRegByte(0, bits_high);
@@ -104,14 +109,14 @@ public class LCD {
         lcd_toogle_enable(bits_low);
     }
 
-    private void lcd_toogle_enable(byte bits) throws Exception {
+    private void lcd_toogle_enable(byte bits) throws IOException {
         device.writeRegByte(0, (byte) (bits | ENABLE));
         device.writeRegByte(0, (byte) (bits & ~ENABLE));
     }
 
-    public void print(String msg, int line) throws Exception {
+    public void print(String msg, int line) throws IOException {
         if (line > max_line)
-            throw new Exception("Out of line");
+            throw new IOException("Out of line");
 
         switch (line) {
             case 1:

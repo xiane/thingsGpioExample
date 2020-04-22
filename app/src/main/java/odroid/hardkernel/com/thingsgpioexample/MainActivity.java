@@ -3,6 +3,8 @@ package odroid.hardkernel.com.thingsgpioexample;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.IOException;
+
 import odroid.hardkernel.com.Lcd.LCD;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,8 +15,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            lcd = new LCD(20, 4);
-            lcd.init();
+            lcd = new LCD("I2C-1");
+            lcd.init(20, 4);
             while (true) {
                 lcd.print("****ODROID-N2****", 1);
                 lcd.print("ODROID-magazine ", 2);
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 lcd.print("4th line is work yeh", 4);
                 Thread.sleep(3000);
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
