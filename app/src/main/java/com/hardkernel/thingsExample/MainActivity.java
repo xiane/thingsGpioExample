@@ -1,5 +1,6 @@
 package com.hardkernel.thingsExample;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
@@ -8,9 +9,7 @@ import com.hardkernel.drivers.led.LED;
 
 import java.io.IOException;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private boolean ledOn = false;
     private LED led;
     @Override
