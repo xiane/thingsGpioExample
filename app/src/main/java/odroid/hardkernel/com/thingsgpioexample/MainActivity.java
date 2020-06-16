@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // get first available gpio pin.
-            // in this case, Physical pin #3 is used.
+            // in this case, Physical pin #7 is used.
             gpio = manager.openGpio(gpioList.get(0));
 
             // set the pin's direction and initial state.
@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         Switch gpioSwitch = (Switch) v;
                         if (gpioSwitch.isChecked()) {
-                            // set pin #3 to high, or 1.
+                            // set pin #7 to high, or 1.
                             gpio.setValue(true);
                         } else {
-                            // set pin #3 to low, or 0.
+                            // set pin #7 to low, or 0.
                             gpio.setValue(false);
                         }
                     } catch (IOException io) {
