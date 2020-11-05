@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         altitude = findViewById(R.id.text_altitude);
 
         try {
-            board = new WeatherBoard("I2C-2");
+            board = new WeatherBoard("I2C-1");
             board.init();
         } catch (Exception e) {
             e.printStackTrace();
