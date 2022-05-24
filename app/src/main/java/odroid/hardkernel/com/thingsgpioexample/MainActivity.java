@@ -3,16 +3,22 @@ package odroid.hardkernel.com.thingsgpioexample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Switch;
 
 import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.UartDevice;
+import com.google.android.things.pio.UartDeviceCallback;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     PeripheralManager manager;
     UartDevice uart;
+    UartDeviceCallback callback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,22 +43,40 @@ public class MainActivity extends AppCompatActivity {
             uart.setStopBits(1);
             uart.setHardwareFlowControl(UartDevice.HW_FLOW_CONTROL_NONE);
 
-            String data = "This is test transfer data";
-            uart.write(data.getBytes(), data.length());
+            callback = new UartDeviceCallback() {
+                @Override
+                public boolean onUartDeviceDataAvailable(UartDevice uartDevice) {
+                    byte[] buff = new byte[20];
+                    try {
+                        int length = uartDevice.read(buff, 20);
 
-            uart.flush(UartDevice.FLUSH_OUT);
-            while (true) {
-                byte[] buff = new byte[20];
-
-                int length = uart.read(buff, 20);
-                if (length > 0) {
-                    String retString = new String(buff, 0, length);
-                    Log.d("UartExample", "msg - " + retString);
-                    if (retString.startsWith("exit"))
-                        break;
+                        if (length > 0) {
+                            String retString = new String(buff, 0, length);
+                            Log.d("UartExample", "msg - " + retString);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
                 }
-            }
-            uart.close();
+            };
+
+            final Switch gpio = findViewById(R.id.gpio_switch);
+
+            gpio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (gpio.isChecked()) {
+                            uart.registerUartDeviceCallback(callback);
+                        } else {
+                            uart.unregisterUartDeviceCallback(callback);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception exception) {
             exception.printStackTrace();
         }
