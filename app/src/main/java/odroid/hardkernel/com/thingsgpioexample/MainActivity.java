@@ -1,6 +1,8 @@
 package odroid.hardkernel.com.thingsgpioexample;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,10 +21,17 @@ public class MainActivity extends AppCompatActivity {
     UartDevice uart;
     UartDeviceCallback callback;
 
+    private HandlerThread uartBackGround;
+    private Handler uartHandelr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        uartBackGround = new HandlerThread("UartBackground");
+        uartBackGround.start();
+        uartHandelr = new Handler(uartBackGround.getLooper());
 
         // get Peripheral Manager for managing the gpio.
         manager = PeripheralManager.getInstance();
@@ -34,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // get first available a uart.
             // in this case, UART-1 is used.
-            uart = manager.openUartDevice(uartList.get(0));
+            uart = manager.openUartDevice(uartList.get(1));
 
             // baudrate - 115200, 8N1, non hardware flow control
             uart.setBaudrate(115200);
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (gpio.isChecked()) {
-                            uart.registerUartDeviceCallback(callback);
+                            uart.registerUartDeviceCallback(uartHandelr, callback);
                         } else {
                             uart.unregisterUartDeviceCallback(callback);
                         }
