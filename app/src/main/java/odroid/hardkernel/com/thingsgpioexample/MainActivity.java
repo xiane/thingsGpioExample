@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // get first available a uart.
             // in this case, UART-1 is used.
-            uart = manager.openUartDevice(uartList.get(1));
+            uart = manager.openUartDevice(uartList.get(0));
 
             // baudrate - 115200, 8N1, non hardware flow control
             uart.setBaudrate(115200);
