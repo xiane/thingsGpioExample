@@ -2,59 +2,86 @@ package odroid.hardkernel.com.thingsgpioexample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
-import android.widget.Switch;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.things.pio.PeripheralManager;
-import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    final String TAG = "SpiLoopbackExample";
     PeripheralManager manager;
-    Gpio gpio;
+    SpiDevice spi;
+
+    private TextView spi_rx_txt;
+    private EditText spi_tx_txt;
+    private Button spi_send_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        spi_rx_txt = findViewById(R.id.spi_msg_txt);
+        spi_tx_txt = findViewById(R.id.spi_send_txt);
+        spi_send_btn = findViewById(R.id.spi_send_btn);
+
         // get Peripheral Manager for managing the gpio.
         manager = PeripheralManager.getInstance();
 
-        // get available gpio pin list.
-        // each pin name is consist as P + physical pin number.
-        List<String> gpioList = manager.getGpioList();
+        // get available spi list.
+        List<String> spiList = manager.getSpiBusList();
 
         try {
-            // get first available gpio pin.
-            // in this case, Physical pin #7 is used.
-            gpio = manager.openGpio(gpioList.get(0));
+            // get SPI bus.
+            spi = manager.openSpiDevice(spiList.get(0));
 
-            // set the pin's direction and initial state.
-            gpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-            Switch gpioSwitch = findViewById(R.id.gpio_switch);
-
-            gpioSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Switch gpioSwitch = (Switch) v;
-                        if (gpioSwitch.isChecked()) {
-                            // set pin #7 to high, or 1.
-                            gpio.setValue(true);
-                        } else {
-                            // set pin #7 to low, or 0.
-                            gpio.setValue(false);
-                        }
-                    } catch (IOException io) {
-                        io.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            // set the SPI initial state.
+            spi.setFrequency(10000000);
+            spi.setMode(SpiDevice.MODE0);
+            spi.setBitsPerWord(8);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        spi_send_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Editable msg = spi_tx_txt.getText();
+                try {
+                    byte[] msgByte = msg.toString().getBytes(StandardCharsets.UTF_8);
+                    Log.d(TAG, Arrays.toString(msgByte));
+
+                    final byte[] rxByte = new byte[msgByte.length];
+                    spi.transfer(msgByte, rxByte, msgByte.length);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final byte[] buff = rxByte;
+                                spi_rx_txt.setText(new String(buff, 0, buff.length, "UTF-8"));
+                                spi_tx_txt.setText("");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
