@@ -1,14 +1,34 @@
 package odroid.hardkernel.com.thingsgpioexample;
 
+import static java.lang.Thread.sleep;
+
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
 
 import odroid.hardkernel.com.Lcd.LCD;
+import odroid.hardkernel.com.eeprom.at24c;
+import odroid.hardkernel.com.eeprom.at24c32;
+
+import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.GpioCallback;
+import com.google.android.things.pio.I2cDevice;
+import com.google.android.things.pio.PeripheralManager;
+import com.google.android.things.pio.Pwm;
+
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     LCD lcd;
+    HandlerThread handlerThread = new HandlerThread("backgroundThread");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,23 +37,84 @@ public class MainActivity extends AppCompatActivity {
         try {
             lcd = new LCD("I2C-1");
             lcd.init(20, 4);
-            while (true) {
-                lcd.print("****ODROID-N2****", 1);
-                lcd.print("ODROID-magazine ", 2);
 
-                lcd.print("A speed is reliable?", 3);
-                lcd.print("Or is it really slow", 4);
-                Thread.sleep(3000);
+            final TextView gpioView[] = new TextView[4];
+            gpioView[0] = findViewById(R.id.gpioText1);
+            gpioView[1] = findViewById(R.id.gpioText2);
+            gpioView[2] = findViewById(R.id.gpioText3);
+            gpioView[3] = findViewById(R.id.gpioText4);
 
-                lcd.print("***HardKernel***", 1);
-                lcd.print("*hardkernel.com*", 2);
+            if (!handlerThread.isAlive())
+                handlerThread.start();
 
-                lcd.print("This is I2C test apk", 3);
-                lcd.print("4th line is work yeh", 4);
-                Thread.sleep(3000);
+            PeripheralManager manager = PeripheralManager.getInstance();
+
+            List<String> pwmList = manager.getPwmList();
+            Pwm pwm = manager.openPwm(pwmList.get(1));
+
+            Gpio gpio[] = new Gpio[4];
+            gpio[0] = manager.openGpio("7");
+            gpio[1] = manager.openGpio("11");
+            gpio[2] = manager.openGpio("13");
+            gpio[3] = manager.openGpio("16");
+
+            for(int i=0; i<4; i++){
+                gpio[i].setEdgeTriggerType(Gpio.EDGE_FALLING);
+                final int finalI = i;
+                gpio[i].registerGpioCallback(new GpioCallback() {
+                    int val = 0;
+                    int idx = finalI;
+                    @Override
+                    public boolean onGpioEdge(Gpio gpio) {
+                        gpioView[idx].setText("[" + idx + "] this is it " + val++);
+                        return true;
+                    }
+                });
             }
+
+            at24c32 eeprom= new at24c32("I2C-1", 0x57);
+            byte[] data = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz".getBytes();
+            eeprom.write(0x0, data, data.length);
+            byte[] read = eeprom.read(0x0, 480);
+
+            Log.d("eeprom", "rd length - " + read.length);
+            Log.d("eeprom", "rd result - " + new String(read));
+
+            while (true) {
+                for (int i = 0; i < read.length/80; i++) {
+                    printLcd(read, i * 80);
+                    Thread.sleep(3000);
+                }
+            }
+//            while (true) {
+//                lcd.print("****ODROID-N2****", 1);
+//                lcd.print("ODROID-magazine ", 2);
+//
+//                lcd.print("A speed is reliable?", 3);
+//                lcd.print("Or is it really slow", 4);
+//                Thread.sleep(3000);
+//
+//                lcd.print("***HardKernel***", 1);
+//                lcd.print("*hardkernel.com*", 2);
+//
+//                lcd.print("This is I2C test apk", 3);
+//                lcd.print("4th line is work yeh", 4);
+//                Thread.sleep(3000);
+//            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void printLcd(byte[] lcd_buffer, int idx) throws IOException {
+        final int line_max = 20;
+        for (int i=0; i<4; i++)
+            printLcdLine(lcd_buffer, idx + (i * line_max), i+1);
+    }
+
+    private void printLcdLine(byte[] buf, int idx, int line) throws IOException {
+        byte[] lcd_buffer = new byte[20];
+        System.arraycopy(buf, idx, lcd_buffer, 0, 20);
+        lcd.print(new String(lcd_buffer), line);
     }
 }
