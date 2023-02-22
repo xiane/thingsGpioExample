@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">thingsGpioExample</string>
     <string name="gpio_switch">Gpio Switch</string>
+    <string name="update_text_to_lcd">Update Text to LCD</string>
+    <string name="text_for_lcd">Text for LCD</string>
 </resources>

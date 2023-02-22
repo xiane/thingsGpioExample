@@ -8,6 +8,9 @@ import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -27,7 +30,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     LCD lcd;
-    HandlerThread handlerThread = new HandlerThread("backgroundThread");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,7 @@ public class MainActivity extends AppCompatActivity {
             gpioView[2] = findViewById(R.id.gpioText3);
             gpioView[3] = findViewById(R.id.gpioText4);
 
-            if (!handlerThread.isAlive())
-                handlerThread.start();
-
             PeripheralManager manager = PeripheralManager.getInstance();
-
-            List<String> pwmList = manager.getPwmList();
-            Pwm pwm = manager.openPwm(pwmList.get(1));
 
             Gpio gpio[] = new Gpio[4];
             gpio[0] = manager.openGpio("7");
@@ -72,20 +68,41 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
 
-            at24c32 eeprom= new at24c32("I2C-1", 0x57);
-            byte[] data = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz".getBytes();
-            eeprom.write(0x0, data, data.length);
-            byte[] read = eeprom.read(0x0, 480);
+            final EditText textInput = findViewById(R.id.TextInputForLCD);
+            Button updateLcdBtn = findViewById(R.id.UpdateLCD);
+            final at24c32 eeprom= new at24c32("I2C-1", 0x57);
 
-            Log.d("eeprom", "rd length - " + read.length);
-            Log.d("eeprom", "rd result - " + new String(read));
-
-            while (true) {
-                for (int i = 0; i < read.length/80; i++) {
-                    printLcd(read, i * 80);
-                    Thread.sleep(3000);
+            updateLcdBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String input = textInput.getText().toString();
+                    byte[] data = input.getBytes();
+                    try {
+                        eeprom.write(0x0, data, data.length);
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+            });
+
+            Thread lcdThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        at24c32 eeprom = new at24c32("I2C-1", 0x57);
+
+                        while (true) {
+                            byte[] bf = eeprom.read(0x0, 80);
+                            printLcd(bf, 0);
+                            sleep(3000);
+                        }
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            lcdThread.start();
+
 //            while (true) {
 //                lcd.print("****ODROID-N2****", 1);
 //                lcd.print("ODROID-magazine ", 2);
