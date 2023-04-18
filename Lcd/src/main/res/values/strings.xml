@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lcd</string>
+    <string name="update_text_to_lcd">Update Text to LCD</string>
+    <string name="text_for_lcd">Text for LCD</string>
+</resources>
