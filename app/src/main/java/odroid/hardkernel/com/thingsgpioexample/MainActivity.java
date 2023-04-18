@@ -4,16 +4,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import java.io.IOException;
-import odroid.hardkernel.com.RotaryEncoder.RotaryDoing;
-import odroid.hardkernel.com.RotaryEncoder.RotaryEncoder;
 import com.google.android.things.contrib.driver.pwmservo.Servo;
+import com.hardkernel.odroid.things.contrib.RotaryEncoder.IncrementalRotaryEncoder;
+import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.GpioCallback;
 
 public class MainActivity extends AppCompatActivity {
     private final int MIN = -90;
     private final int MAX = 90;
 
     private Servo mServo;
-    private RotaryEncoder rotaryEncoder;
+    private IncrementalRotaryEncoder rotaryEncoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
             mServo.setAngleRange(MIN, MAX);
             mServo.setEnabled(true);
 
-            mServo.setAngle(0);
+            mServo.setAngle(40);
 
-            rotaryEncoder = new RotaryEncoder("13", "11", "7", new RotaryDoing() {
+            rotaryEncoder = new IncrementalRotaryEncoder("13", "11", "7",
+                    new IncrementalRotaryEncoder.RotaryListener() {
                 int duty = 0;
                 @Override
                 public void cw() {
@@ -56,12 +58,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            rotaryEncoder.registerSwitch(new GpioCallback() {
+                @Override
+                public boolean onGpioEdge(Gpio gpio) {
+                    Log.d("sw", "click!");
+                    return true;
+                }
+            });
 
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        rotaryEncoder.doLoop();
+                        rotaryEncoder.startEncoder();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
