@@ -1,4 +1,4 @@
-package odroid.hardkernel.com.thingsgpioexample;
+package odroid.hardkernel.com.RotaryEncoderNServoMotor;
 
 import org.junit.Test;
 
