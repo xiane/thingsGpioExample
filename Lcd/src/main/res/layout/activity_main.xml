@@ -4,66 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-<TextView
-    android:id="@+id/gpioText1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    tools:context="odroid.hardkernel.com.Lcd.MainActivity">
 
-<TextView
-    android:id="@+id/gpioText2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.498"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/gpioText1" />
+    <EditText
+        android:id="@+id/TextInputForLCD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/text_for_lcd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<TextView
-    android:id="@+id/gpioText3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/gpioText2" />
+    <Button
+        android:id="@+id/UpdateLCD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="80"
+        android:text="@string/update_text_to_lcd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextInputForLCD" />
 
-<TextView
-    android:id="@+id/gpioText4"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/gpioText3" />
-
-<EditText
-    android:id="@+id/TextInputForLCD"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:ems="10"
-    android:inputType="textPersonName"
-    android:text="@string/text_for_lcd"
-    app:layout_constraintBottom_toTopOf="@+id/gpioText1"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-<Button
-    android:id="@+id/UpdateLCD"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:maxLength="80"
-    android:text="@string/update_text_to_lcd"
-    app:layout_constraintBottom_toTopOf="@+id/gpioText1"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/TextInputForLCD" />
+    <Switch
+        android:id="@+id/eepromSw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/from_eeprom"
+        app:layout_constraintBottom_toBottomOf="@+id/UpdateLCD"
+        app:layout_constraintEnd_toStartOf="@+id/UpdateLCD"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/UpdateLCD" />
 
 </android.support.constraint.ConstraintLayout>

@@ -5,28 +5,119 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+
 import com.hardkernel.odroid.things.contrib.Lcd.Lcd;
 import com.hardkernel.odroid.things.contrib.Eeprom.at24c32;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
-    LCD lcd;
+    Lcd lcd;
+
+    abstract static class flagRunnable implements Runnable {
+        private final AtomicBoolean runFlag = new AtomicBoolean(false);
+        public void stop() {
+            runFlag.set(false);
+        }
+
+        @Override
+        public void run() {
+            runFlag.set(true);
+            preRun();
+            while (runFlag.get()) {
+                realRun();
+            }
+            postRun();
+        }
+        public abstract void preRun();
+        public abstract void realRun();
+        public abstract void postRun();
+    }
+
+    private final flagRunnable eepromRunnable = new flagRunnable() {
+        at24c32 eeprom;
+        @Override
+        public void preRun() {
+            try {
+                eeprom = new at24c32("I2C-1", 0x57);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void realRun() {
+            try {
+                byte[] bf = eeprom.read(0x0, 80);
+                printLcd(bf, 0);
+                sleep(3000);
+            } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void postRun() {
+            try {
+                eeprom.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    };
+
+    private final flagRunnable lcdSelfRunnable = new flagRunnable() {
+        @Override
+        public void preRun() {}
+
+        @Override
+        public void realRun() {
+            try {
+                lcd.print("****ODROID-N2****", 1);
+                lcd.print("ODROID-magazine ", 2);
+
+                lcd.print("A speed is reliable?", 3);
+                lcd.print("Or is it really slow", 4);
+                Thread.sleep(3000);
+
+                lcd.print("***HardKernel***", 1);
+                lcd.print("*hardkernel.com*", 2);
+
+                lcd.print("This is I2C test apk", 3);
+                lcd.print("4th line is work yeh", 4);
+                Thread.sleep(3000);
+            } catch(IOException| InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void postRun() {}
+    };
+    private Thread eepromLcdThread;
+    private Thread lcdSelfThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            lcd = new LCD("I2C-1");
-            lcd.init(20, 4);
+        final EditText textInput = findViewById(R.id.TextInputForLCD);
+        final Button updateLcdBtn = findViewById(R.id.UpdateLCD);
+        final Switch eepromSwitch = findViewById(R.id.eepromSw);
 
-            final EditText textInput = findViewById(R.id.TextInputForLCD);
-            Button updateLcdBtn = findViewById(R.id.UpdateLCD);
-            final at24c32 eeprom= new at24c32("I2C-1", 0x57);
+        textInput.setEnabled(false);
+        updateLcdBtn.setEnabled(false);
+
+        try {
+            lcd = new Lcd("I2C-1", 20, 4);
+
+            final at24c32 eeprom = new at24c32("I2C-1", 0x57);
 
             updateLcdBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -40,43 +131,39 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-
-            Thread lcdThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        at24c32 eeprom = new at24c32("I2C-1", 0x57);
-
-                        while (true) {
-                            byte[] bf = eeprom.read(0x0, 80);
-                            printLcd(bf, 1);
-                            sleep(3000);
-                        }
-                    } catch (InterruptedException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            lcdThread.start();
-
-            while (true) {
-                //                lcd.print("****ODROID-N2****", 1);
-                //                lcd.print("ODROID-magazine ", 2);
-                //
-                //                lcd.print("A speed is reliable?", 3);
-                //                lcd.print("Or is it really slow", 4);
-                //                Thread.sleep(3000);
-                //
-                //                lcd.print("***HardKernel***", 1);
-                //                lcd.print("*hardkernel.com*", 2);
-                //
-                //                lcd.print("This is I2C test apk", 3);
-                //                lcd.print("4th line is work yeh", 4);
-                //                Thread.sleep(3000);
-                //            }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException|InterruptedException e) {
             e.printStackTrace();
         }
+
+        lcdSelfThread = new Thread(lcdSelfRunnable);
+        lcdSelfThread.start();
+        eepromSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                textInput.setEnabled(isChecked);
+                updateLcdBtn.setEnabled(isChecked);
+
+                try {
+                    if (isChecked) {
+                        lcdSelfRunnable.stop();
+                        lcdSelfThread.join();
+                        lcdSelfThread = null;
+
+                        eepromLcdThread = new Thread(eepromRunnable);
+                        eepromLcdThread.start();
+                    } else {
+                        eepromRunnable.stop();
+                        eepromLcdThread.join();
+                        eepromLcdThread = null;
+
+                        lcdSelfThread = new Thread(lcdSelfRunnable);
+                        lcdSelfThread.start();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void printLcd(byte[] lcd_buffer, int idx) throws IOException {
