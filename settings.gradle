@@ -1,5 +1,6 @@
-include ':RotaryEncoderNServoMotor'
 include ':Lcd'
-include ':WeatherBoard'
 include ':Mcp2515'
+include ':RotaryEncoderNServoMotor'
 include ':Tcs34725'
+include ':WeatherBoard'
+include ':Ws2801'
