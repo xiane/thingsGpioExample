@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Led</string>
+    <string name="led_switch">LED Switch</string>
+</resources>
