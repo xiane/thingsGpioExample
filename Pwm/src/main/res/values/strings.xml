@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pwm</string>
+    <string name="pwm_switch">Pwm Switch</string>
+</resources>
