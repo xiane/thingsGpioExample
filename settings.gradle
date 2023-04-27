@@ -1,3 +1,4 @@
+include ':Joystick'
 include ':Lcd'
 include ':Mcp2515'
 include ':RotaryEncoderNServoMotor'
