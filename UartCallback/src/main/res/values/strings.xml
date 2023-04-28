@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Uart Callback</string>
+    <string name="gpio_switch">Uart Callback Switch</string>
+    <string name="send">Send</string>
+    <string name="insert_message">Insert Message</string>
+    <string name="received_message">Received Message</string>
+    <string name="insert_send_message">Insert Send Message</string>
+</resources>
