@@ -56,17 +56,15 @@ public class MainActivity extends AppCompatActivity {
         spi_send_btn.setOnClickListener(v -> {
             Editable msg = spi_tx_txt.getText();
             try {
-                Log.d(TAG, "target mesg - " + msg.toString());
                 byte[] msgByte = msg.toString().getBytes(StandardCharsets.UTF_8);
                 Log.d(TAG, Arrays.toString(msgByte));
 
                 final byte[] rxByte = new byte[msgByte.length];
                 spi.transfer(msgByte, rxByte, msgByte.length);
 
-                Log.d(TAG, Arrays.toString(rxByte));
                 runOnUiThread(() -> {
-                    String convertedMsg = new String(rxByte, 0, rxByte.length, StandardCharsets.UTF_8);
-                    Log.d(TAG, "converted mesg - " + convertedMsg);
+                    String receivedMsg = new String(rxByte, 0, rxByte.length, StandardCharsets.UTF_8);
+                    Log.d(TAG, "Received msg - " + receivedMsg);
                     spi_rx_txt.setText(
                             new String(rxByte, 0, rxByte.length, StandardCharsets.UTF_8));
                     spi_tx_txt.setText("");

@@ -10,8 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-library android:name="com.google.android.things" />
-        <activity android:name="odroid.hardkernel.com.Ws2801.RainbowLedActivity">
-            <intent-filter>
+        <activity android:name="odroid.hardkernel.com.Ws2801.RainbowLedActivity"
+            android:exported="true">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

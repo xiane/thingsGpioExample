@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/gpio_switch"
         android:layout_width="wrap_content"
-        android:layout_height="27dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"

@@ -3,9 +3,7 @@ package odroid.hardkernel.com.Lcd;
 import android.hardkernel.com.Lcd.R;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 
@@ -119,49 +117,45 @@ public class MainActivity extends AppCompatActivity {
 
             final at24c32 eeprom = new at24c32("I2C-1", 0x57);
 
-            updateLcdBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String input = textInput.getText().toString();
-                    byte[] data = input.getBytes();
-                    try {
-                        eeprom.write(0x0, data, data.length);
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            updateLcdBtn.setOnClickListener(v -> {
+                String input = textInput.getText().toString();
+                byte[] data = input.getBytes();
+                try {
+                    eeprom.write(0x0, data, data.length);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
                 }
             });
+
+            eeprom.close();
         } catch (IOException|InterruptedException e) {
             e.printStackTrace();
         }
 
         lcdSelfThread = new Thread(lcdSelfRunnable);
         lcdSelfThread.start();
-        eepromSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                textInput.setEnabled(isChecked);
-                updateLcdBtn.setEnabled(isChecked);
+        eepromSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textInput.setEnabled(isChecked);
+            updateLcdBtn.setEnabled(isChecked);
 
-                try {
-                    if (isChecked) {
-                        lcdSelfRunnable.stop();
-                        lcdSelfThread.join();
-                        lcdSelfThread = null;
+            try {
+                if (isChecked) {
+                    lcdSelfRunnable.stop();
+                    lcdSelfThread.join();
+                    lcdSelfThread = null;
 
-                        eepromLcdThread = new Thread(eepromRunnable);
-                        eepromLcdThread.start();
-                    } else {
-                        eepromRunnable.stop();
-                        eepromLcdThread.join();
-                        eepromLcdThread = null;
+                    eepromLcdThread = new Thread(eepromRunnable);
+                    eepromLcdThread.start();
+                } else {
+                    eepromRunnable.stop();
+                    eepromLcdThread.join();
+                    eepromLcdThread = null;
 
-                        lcdSelfThread = new Thread(lcdSelfRunnable);
-                        lcdSelfThread.start();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    lcdSelfThread = new Thread(lcdSelfRunnable);
+                    lcdSelfThread.start();
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
     }

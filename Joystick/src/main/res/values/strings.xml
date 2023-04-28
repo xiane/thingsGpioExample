@@ -1,3 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Joystick</string>
+    <string name="joystick_values" tools:ignore="ExtraTranslation">Joystick Values</string>
 </resources>

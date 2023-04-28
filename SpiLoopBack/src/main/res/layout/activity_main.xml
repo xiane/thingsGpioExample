@@ -10,7 +10,7 @@
         android:id="@+id/spi_msg_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Received Message"
+        android:text="@string/received_message"
         app:layout_constraintBottom_toTopOf="@+id/spi_send_txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,17 +22,19 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Insert Message"
+        android:text="@string/insert_message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/insert_message"
+        android:autofillHints="Insert Message" />
 
     <Button
         android:id="@+id/spi_send_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send"
+        android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

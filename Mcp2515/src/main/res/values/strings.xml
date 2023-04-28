@@ -3,4 +3,6 @@
     <string name="update_text_to_lcd">Update Text to LCD</string>
     <string name="text_for_lcd">Text for LCD</string>
     <string name="from_eeprom">From EEPROM</string>
+    <string name="can_message">CAN Message</string>
+    <string name="test_send">Test SEND</string>
 </resources>

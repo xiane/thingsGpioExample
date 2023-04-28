@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     tools:context="odroid.hardkernel.com.Pwm.MainActivity">
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/pwm_switch"
         android:layout_width="wrap_content"
-        android:layout_height="27dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -24,7 +24,8 @@
         android:id="@+id/pwm_dutyCycle_seekbar"
         android:layout_width="307dp"
         android:layout_height="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/pwm_switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="303dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

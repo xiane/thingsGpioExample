@@ -3,7 +3,7 @@ package odroid.hardkernel.com.Led;
 import android.hardkernel.com.Led.R;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.hardkernel.odroid.things.contrib.Led.Led;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Switch LED = findViewById(R.id.led_switch);
+        SwitchCompat LED = findViewById(R.id.led_switch);
         LED.setOnClickListener(v -> {
             ledOn = !ledOn;
             try {

@@ -7,8 +7,6 @@ import android.util.Log;
 import java.io.IOException;
 import com.google.android.things.contrib.driver.pwmservo.Servo;
 import com.hardkernel.odroid.things.contrib.RotaryEncoder.IncrementalRotaryEncoder;
-import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.GpioCallback;
 
 public class MainActivity extends AppCompatActivity {
     private final int MIN = -90;
@@ -59,22 +57,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            rotaryEncoder.registerSwitch(new GpioCallback() {
-                @Override
-                public boolean onGpioEdge(Gpio gpio) {
-                    Log.d("sw", "click!");
-                    return true;
-                }
+            rotaryEncoder.registerSwitch(gpio -> {
+                Log.d("sw", "click!");
+                return true;
             });
 
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        rotaryEncoder.startEncoder();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            Thread thread = new Thread(() -> {
+                try {
+                    rotaryEncoder.startEncoder();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
             thread.start();

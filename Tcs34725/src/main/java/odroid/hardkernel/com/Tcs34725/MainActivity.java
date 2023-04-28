@@ -4,9 +4,9 @@ import android.graphics.Color;
 import android.hardkernel.com.Tcs34725.R;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.hardkernel.odroid.things.contrib.Lcd.Lcd;
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements ColourSensor.List
     String TAG = "tcs34725";
 
     ConstraintLayout screen;
-    Switch sensorSwitch;
+    SwitchCompat sensorSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

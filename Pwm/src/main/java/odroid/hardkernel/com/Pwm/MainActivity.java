@@ -3,10 +3,10 @@ package odroid.hardkernel.com.Pwm;
 import android.hardkernel.com.Pwm.R;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.util.Log;
 import android.widget.SeekBar;
-import android.widget.Switch;
 
 import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.Pwm;
@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
         for(String pin:pwmList)
             Log.d("things", "pwm name - " + pin);
-        Switch pwmSwitch = findViewById(R.id.pwm_switch);
+        SwitchCompat pwmSwitch = findViewById(R.id.pwm_switch);
         try {
-            final Pwm pwm = manager.openPwm(pwmList.get(1));
+            final Pwm pwm = manager.openPwm(pwmList.get(0));
 
             pwm.setPwmFrequencyHz(3000);
             SeekBar pwm_dutyCycle = findViewById(R.id.pwm_dutyCycle_seekbar);
@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     try {
                         pwm.setPwmDutyCycle(progress);
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -59,13 +61,8 @@ public class MainActivity extends AppCompatActivity {
             });
             pwmSwitch.setOnClickListener(v -> {
                 try {
-                    Switch gpioSwitch = (Switch) v;
-                    if (gpioSwitch.isChecked()) {
-                        pwm.setEnabled(true);
-
-                    } else {
-                        pwm.setEnabled(false);
-                    }
+                    SwitchCompat gpioSwitch = (SwitchCompat) v;
+                    pwm.setEnabled(gpioSwitch.isChecked());
                 } catch (IOException io) {
                     io.printStackTrace();
                 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Tcs34725_example</string>
     <string name="button">Button</string>
+    <string name="sw">Switch</string>
 </resources>
