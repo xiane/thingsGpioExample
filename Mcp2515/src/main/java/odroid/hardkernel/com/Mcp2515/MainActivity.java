@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         can_msg_txt = findViewById(R.id.can_msg_txt);
 
         try {
-            mcp2515 = new Mcp2515(BoardConfig.MCP2515_SPI, BoardConfig.MCP2515_INT);
+            mcp2515 = new Mcp2515(BoardDefaults.getSPIPort(), BoardDefaults.getInterruptPin());
 
             mcp2515.setListener(canMsgListener);
         } catch (IOException e) {

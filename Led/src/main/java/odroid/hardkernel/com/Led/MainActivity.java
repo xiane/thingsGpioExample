@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            led = new Led("7");
+            led = new Led(BoardDefaults.getLedPin());
         } catch (IOException e) {
             e.printStackTrace();
         }

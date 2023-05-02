@@ -1,4 +1,4 @@
-package odroid.hardkernel.com.Ws2801;
+package odroid.hardkernel.com.Lcd;
 
 import android.os.Build;
 
@@ -9,15 +9,15 @@ public class BoardDefaults {
     private static final String DEVICE_ODROIDC4 = "odroidc4";
     private static final String DEVICE_ODROIDM1 = "odroidm1";
     /**
-     * Return the preferred SPI port for each board.
+     * Return the preferred I2C port for each board.
      */
-    public static String getSPIPort() {
+    public static String getI2CPort() {
         switch (Build.DEVICE) {
             case DEVICE_ODROIDC4:
             case DEVICE_ODROIDM1:
             case DEVICE_ODROIDN2:
             case DEVICE_ODROIDN2L:
-                return "SPI0.0";
+                return "I2C-1";
             default:
                 throw new IllegalStateException("Unknown Build.DEVICE " + Build.DEVICE);
         }

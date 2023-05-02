@@ -9,7 +9,7 @@ public class BoardDefaults {
     private static final String DEVICE_ODROIDC4 = "odroidc4";
     private static final String DEVICE_ODROIDM1 = "odroidm1";
     /**
-     * Return the preferred I2C port for each board.
+     * Return the preferred SPI port for each board.
      */
     public static String getSPIPort() {
         switch (Build.DEVICE) {

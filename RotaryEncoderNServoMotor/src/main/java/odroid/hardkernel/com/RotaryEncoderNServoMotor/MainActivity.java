@@ -21,14 +21,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            mServo = new Servo("12");
+            mServo = new Servo(BoardDefaults.getServoMotorPwm());
             mServo.setPulseDurationRange(0.75, 2.6);
             mServo.setAngleRange(MIN, MAX);
             mServo.setEnabled(true);
 
             mServo.setAngle(40);
 
-            rotaryEncoder = new IncrementalRotaryEncoder("13", "11", "7",
+            rotaryEncoder = new IncrementalRotaryEncoder(
+                    BoardDefaults.getDtPin(),
+                    BoardDefaults.getSwPin(),
+                    BoardDefaults.getClkPin(),
                     new IncrementalRotaryEncoder.RotaryListener() {
                 int duty = 0;
                 @Override

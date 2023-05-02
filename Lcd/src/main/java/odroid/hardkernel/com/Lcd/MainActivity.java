@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void preRun() {
             try {
-                eeprom = new at24c32("I2C-1", 0x57);
+                eeprom = new at24c32(BoardDefaults.getI2CPort(), 0x57);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -113,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
         updateLcdBtn.setEnabled(false);
 
         try {
-            lcd = new Lcd("I2C-1", 20, 4);
+            lcd = new Lcd(BoardDefaults.getI2CPort(), 20, 4);
 
-            final at24c32 eeprom = new at24c32("I2C-1", 0x57);
+            final at24c32 eeprom = new at24c32(BoardDefaults.getI2CPort(), 0x57);
 
             updateLcdBtn.setOnClickListener(v -> {
                 String input = textInput.getText().toString();

@@ -80,11 +80,10 @@ public class MainActivity extends AppCompatActivity implements ColourSensor.List
     private Lcd lcd;
 
     private ColourSensor colourSensor;
-    private final String LED_GPIO_NAME = "22";
 
     private void createLcd() {
         try {
-            lcd = new Lcd("I2C-1", LCD_WIDTH, LCD_HEIGHT);
+            lcd = new Lcd(BoardDefaults.getI2CPort(), LCD_WIDTH, LCD_HEIGHT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ColourSensor.List
 
     private void createColourSensor() {
         ColourSensor.ColourSensorBuilder builder = ColourSensor.builder();
-        colourSensor = builder.withLedGpio(LED_GPIO_NAME).withListener(this).build();
+        colourSensor = builder.withLedGpio(BoardDefaults.getLedGpio()).withListener(this).build();
         colourSensor.enable(false);
     }
 }
