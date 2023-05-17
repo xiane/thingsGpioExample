@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Oled &amp; RTC</string>
+    <string name="cross_hairs">Cross hairs</string>
+    <string name="dots">Dots</string>
+    <string name="timer">Timer</string>
+    <string name="all_white">All white</string>
+    <string name="display_flip">Display Flip</string>
+    <string name="display_mirror">Display Mirror</string>
+    <string name="display_inverse">Display Inverse</string>
+</resources>

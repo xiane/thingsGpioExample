@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="odroid.hardkernel.com.OledNRtc.MainActivity">
+
+    <RadioGroup
+        android:id="@+id/oledGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/crossHairs"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/cross_hairs" />
+
+        <RadioButton
+            android:id="@+id/dots"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/dots" />
+
+        <RadioButton
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/timer" />
+
+        <RadioButton
+            android:id="@+id/allWhite"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/all_white" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/oledGroup"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Switch
+            android:id="@+id/display_flip"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/display_flip" />
+
+        <Switch
+            android:id="@+id/display_mirror"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/display_mirror" />
+
+        <Switch
+            android:id="@+id/display_inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/display_inverse" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
