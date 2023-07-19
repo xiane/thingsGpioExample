@@ -1,3 +1,4 @@
+include ':BarcodeScanner'
 include ':Joystick'
 include ':Lcd'
 include ':Led'
