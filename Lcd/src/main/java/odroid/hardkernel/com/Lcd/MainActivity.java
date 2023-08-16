@@ -16,6 +16,16 @@ import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
     Lcd lcd;
+    final at24c32 eeprom;
+
+    {
+        try {
+            eeprom = new at24c32(BoardDefaults.getI2CPort(),
+                    BoardDefaults.getAddressGpio(), 0x57);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     abstract static class flagRunnable implements Runnable {
         private final AtomicBoolean runFlag = new AtomicBoolean(false);
@@ -38,14 +48,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final flagRunnable eepromRunnable = new flagRunnable() {
-        at24c32 eeprom;
         @Override
         public void preRun() {
-            try {
-                eeprom = new at24c32(BoardDefaults.getI2CPort(), 0x57);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         @Override
@@ -115,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             lcd = new Lcd(BoardDefaults.getI2CPort(), 20, 4);
 
-            final at24c32 eeprom = new at24c32(BoardDefaults.getI2CPort(), 0x57);
-
             updateLcdBtn.setOnClickListener(v -> {
                 String input = textInput.getText().toString();
                 byte[] data = input.getBytes();
@@ -126,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-
-            eeprom.close();
         } catch (IOException|InterruptedException e) {
             e.printStackTrace();
         }

@@ -22,4 +22,18 @@ public class BoardDefaults {
                 throw new IllegalStateException("Unknown Build.DEVICE " + Build.DEVICE);
         }
     }
+
+    public static String[] getAddressGpio() {
+        switch (Build.DEVICE) {
+            case DEVICE_ODROIDC4:
+                return new String[] {"16", "18", "22"};
+            case DEVICE_ODROIDM1:
+                return new String[] {"12", "16", "18"};
+            case DEVICE_ODROIDN2:
+            case DEVICE_ODROIDN2L:
+                return new String[] {"7", "16", "18"};
+            default:
+                throw new IllegalStateException("Unknown Build.DEVICE " + Build.DEVICE);
+        }
+    }
 }
