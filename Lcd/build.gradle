@@ -27,5 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compileOnly 'com.google.android.things:androidthings:1.0'
     implementation 'com.hardkernel:driver-Lcd:0.5'
-    implementation 'com.hardkernel:driver-Eeprom:0.5.1'
+    implementation 'com.hardkernel:driver-Eeprom:0.6'
 }
