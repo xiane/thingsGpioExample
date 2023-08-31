@@ -45,7 +45,7 @@ public class RainbowLedActivity extends Activity {
         }
     }
 
-    private Runnable mAnimateRunnable = new Runnable() {
+    private final Runnable mAnimateRunnable = new Runnable() {
         @Override
         public void run() {
             try {

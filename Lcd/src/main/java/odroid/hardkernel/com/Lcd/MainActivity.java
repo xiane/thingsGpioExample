@@ -2,10 +2,10 @@ package odroid.hardkernel.com.Lcd;
 
 import android.hardkernel.com.Lcd.R;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.hardkernel.odroid.things.contrib.Lcd.Lcd;
 import com.hardkernel.odroid.things.contrib.Eeprom.at24c32;
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText textInput = findViewById(R.id.TextInputForLCD);
         final Button updateLcdBtn = findViewById(R.id.UpdateLCD);
-        final Switch eepromSwitch = findViewById(R.id.eepromSw);
+        final SwitchCompat eepromSwitch = findViewById(R.id.eepromSw);
 
         textInput.setEnabled(false);
         updateLcdBtn.setEnabled(false);

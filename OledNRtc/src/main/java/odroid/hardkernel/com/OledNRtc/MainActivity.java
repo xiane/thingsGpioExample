@@ -11,10 +11,10 @@ import android.graphics.Paint;
 import android.hardkernel.com.OledNRtc.R;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.RadioGroup;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.hardkernel.odroid.things.contrib.Ssd1306.BitmapHelper;
 import com.hardkernel.odroid.things.contrib.Ssd1306.Ssd1306;
@@ -22,7 +22,6 @@ import com.hardkernel.odroid.things.contrib.Ssd1306.Ssd1306;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "OledScreenActivity";
@@ -81,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Switch display_flip = findViewById(R.id.display_flip);
-        Switch display_mirror = findViewById(R.id.display_mirror);
-        Switch display_inverse = findViewById(R.id.display_inverse);
+        SwitchCompat display_flip = findViewById(R.id.display_flip);
+        SwitchCompat display_mirror = findViewById(R.id.display_mirror);
+        SwitchCompat display_inverse = findViewById(R.id.display_inverse);
 
         display_flip.setOnCheckedChangeListener((compoundButton, on) -> {
             try {
@@ -197,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void drawTimer() {
         SimpleDateFormat dayFormatter = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");

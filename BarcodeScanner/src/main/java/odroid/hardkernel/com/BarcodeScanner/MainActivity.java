@@ -1,7 +1,7 @@
 package odroid.hardkernel.com.BarcodeScanner;
 
 import android.annotation.SuppressLint;
-import android.hardkernel.com.UartCallback.R;
+import android.hardkernel.com.BarcodeScanner.R;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;

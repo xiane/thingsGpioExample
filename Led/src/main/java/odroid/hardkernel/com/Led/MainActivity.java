@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 targetLed = new Led(name);
+                setChecked(Boolean.TRUE.equals(targetLed.getState()));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }

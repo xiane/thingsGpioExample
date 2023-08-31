@@ -1,7 +1,7 @@
 package odroid.hardkernel.com.RotaryEncoderNServoMotor;
 
 import android.hardkernel.com.RotaryEncoderNServoMotor.R;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import java.io.IOException;
