@@ -12,6 +12,8 @@ import android.hardkernel.com.OledNRtc.R;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Looper;
 import android.util.Log;
 import android.widget.RadioGroup;
 import androidx.appcompat.widget.SwitchCompat;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     Ssd1306 mScreen;
 
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private Bitmap mBitmap;
 
     enum Modes {
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         ALL_WHITE,
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,19 +65,14 @@ public class MainActivity extends AppCompatActivity {
         oledGroup.check(R.id.timer);
 
         oledGroup.setOnCheckedChangeListener((radioGroup, id) -> {
-            switch (id) {
-                case R.id.crossHairs:
-                    mMode = Modes.CROSS_HAIRS;
-                    break;
-                case R.id.dots:
-                    mMode = Modes.DOTS;
-                    break;
-                case R.id.timer:
-                    mMode = Modes.TIMER;
-                    break;
-                case R.id.allWhite:
-                    mMode = Modes.ALL_WHITE;
-                    break;
+            if (id == R.id.crossHairs) {
+                mMode = Modes.CROSS_HAIRS;
+            } else if (id == R.id.dots) {
+                mMode = Modes.DOTS;
+            } else if (id == R.id.timer) {
+                mMode = Modes.TIMER;
+            } else if (id == R.id.allWhite) {
+                mMode = Modes.ALL_WHITE;
             }
         });
 

@@ -1,13 +1,15 @@
 package odroid.hardkernel.com.WeatherBoard;
 
-import android.annotation.SuppressLint;
 import android.hardkernel.com.WeatherBoard.R;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.TextView;
 
 import com.hardkernel.odroid.things.contrib.WeatherBoard.WeatherBoard;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     TextView uv;
@@ -20,21 +22,27 @@ public class MainActivity extends AppCompatActivity {
     TextView altitude;
     WeatherBoard board;
 
-    final Handler handler = new Handler();
+    final Handler handler = new Handler(Looper.getMainLooper());
     final Runnable weather = new Runnable() {
-        @SuppressLint("DefaultLocale")
         @Override
         public void run() {
             try {
-                uv.setText(String.format("%10.2f", (board.readUV() / 100.0)));
-                visible.setText(String.format(" %3.2f LUX", board.readVisible()));
-                ir.setText(String.format("%3.2f LUX", board.readIR()));
+                uv.setText(String.format(Locale.getDefault(),
+                        "%10.2f", (board.readUV() / 100.0)));
+                visible.setText(String.format(Locale.getDefault(),
+                        " %3.2f LUX", board.readVisible()));
+                ir.setText(String.format(Locale.getDefault(),
+                        "%3.2f LUX", board.readIR()));
 
-                temp.setText(String.format(" %2.2fC", board.readTemperatureC()));
-                hum.setText(String.format("%3.2f%%", board.readHumidity()));
+                temp.setText(String.format(Locale.getDefault(),
+                        " %2.2fC", board.readTemperatureC()));
+                hum.setText(String.format(Locale.getDefault(),
+                        "%3.2f%%", board.readHumidity()));
                 double pressure = board.readPressure();
-                press.setText(String.format("%4.2fhPa", pressure));
-                altitude.setText(String.format("%3.2fM", board.readAltitude(pressure, 1024.25)));
+                press.setText(String.format(Locale.getDefault(),
+                        "%4.2fhPa", pressure));
+                altitude.setText(String.format(Locale.getDefault(),
+                        "%3.2fM", board.readAltitude(pressure, 1024.25)));
             } catch(Exception e) {e.printStackTrace();}
         }
     };
@@ -75,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         rapidRunnable rapid = new rapidRunnable();
         Thread thread = new Thread(rapid);
-
         thread.start();
     }
 }
