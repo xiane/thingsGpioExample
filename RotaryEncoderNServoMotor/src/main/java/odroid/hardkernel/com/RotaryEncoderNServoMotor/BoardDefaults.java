@@ -9,6 +9,7 @@ public class BoardDefaults {
     private static final String DEVICE_ODROIDN2L = "odroidn2l";
     private static final String DEVICE_ODROIDC4 = "odroidc4";
     private static final String DEVICE_ODROIDM1 = "odroidm1";
+    private static final String DEVICE_ODROIDM1S = "odroidm1s";
 
     /**
      * Return the preferred PWM Pin for each board.
@@ -16,6 +17,7 @@ public class BoardDefaults {
     public static String getServoMotorPwm() {
         switch (Build.DEVICE) {
             case DEVICE_ODROIDM1:
+            case DEVICE_ODROIDM1S:
                 return "7";
             case DEVICE_ODROIDC4:
             case DEVICE_ODROIDN2:
@@ -32,6 +34,7 @@ public class BoardDefaults {
     public static String getDtPin() {
         switch (Build.DEVICE) {
             case DEVICE_ODROIDM1:
+            case DEVICE_ODROIDM1S:
                 return "12";
             case DEVICE_ODROIDC4:
             case DEVICE_ODROIDN2:
@@ -45,6 +48,7 @@ public class BoardDefaults {
     public static String getSwPin() {
         switch (Build.DEVICE) {
             case DEVICE_ODROIDM1:
+            case DEVICE_ODROIDM1S:
                 return "16";
             case DEVICE_ODROIDC4:
             case DEVICE_ODROIDN2:
@@ -58,6 +62,7 @@ public class BoardDefaults {
     public static String getClkPin() {
         switch (Build.DEVICE) {
             case DEVICE_ODROIDM1:
+            case DEVICE_ODROIDM1S:
                 return "18";
             case DEVICE_ODROIDC4:
             case DEVICE_ODROIDN2:
