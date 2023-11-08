@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Weather Board Zero</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Relative Humidity</string>
+    <string name="temperature_c">default_C</string>
+    <string name="humidity_k">default_%</string>
+    <string name="id">Chip ID</string>
+</resources>
