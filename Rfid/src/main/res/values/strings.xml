@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">RFID</string>
+    <string name="read">Read</string>
+    <string name="tag_uid">UID: %1$s</string>
+    <string name="write">Write</string>
+    <string name="default_write_value">DEADBEAF0123456789ABCDEFCAFEBABE</string>
+    <string name="write_error">Could not write to sector.</string>
+    <string name="read_error">Could not read block.</string>
+    <string name="authentication_error">Couldn\'t authenticate for sector.</string>
+    <string name="reading">Reading</string>
+    <string name="writing">Writing</string>
+    <string name="unknown_error">Unknown error.</string>
+    <string name="sector_write_success">Sector written successfully</string>
+</resources>

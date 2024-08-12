@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="odroid.hardkernel.com.rfid.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="200dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <SeekBar
+                android:id="@+id/sector"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:max="15"
+                android:min="0" />
+
+            <TextView
+                android:id="@+id/sector_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Sector : 0" />
+
+            <SeekBar
+                android:id="@+id/block"
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                android:min="0" />
+
+            <TextView
+                android:id="@+id/block_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Block : 0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/read_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/read" />
+
+                <Button
+                    android:id="@+id/write_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/write" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/write_value"
+                android:layout_width="400sp"
+                android:layout_height="wrap_content"
+                android:digits="0123456789ABCDEF"
+                android:ems="32"
+                android:inputType="textCapCharacters"
+                android:maxLength="32"
+                android:maxLines="1"
+                android:text="@string/default_write_value" />
+
+            <TextView
+                android:id="@+id/tag_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Tag UID" />
+
+            <TextView
+                android:id="@+id/tag_results"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Tag results" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

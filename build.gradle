@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.2'
-        
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20-RC'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -25,6 +25,7 @@ ext {
     DEFAULT_COMPILE_SDK_VERSION = 33
     DEFAULT_MIN_SDK_VERSION = 28
     DEFAULT_TARGET_SDK_VERSION = 33
+    kotlin_version = "2.0.20-RC"
 }
 
 task clean(type: Delete) {
